@@ -10,7 +10,7 @@ class Produk extends Component
 
     public $produks;
     public $i = 1;
-    public $inputs = [];
+    public $inputs = [1];
 
     public function mount()
     {

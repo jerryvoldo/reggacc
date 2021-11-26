@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Register;
+use App\Models\Perusahaan;
 
 class DaftarController extends Controller
 {
@@ -15,7 +16,10 @@ class DaftarController extends Controller
     public function index()
     {
         //
-        $daftar = Register::paginate(20);
+        $daftar = Perusahaan::select('perusahaans.id', 'perusahaans.badan_hukum', 'registers.nomor_registrasi', 'perusahaans.nama as perusahaan_nama', 'propinsis.nama as propinsi_nama')
+                    ->leftJoin('registers', 'perusahaans.id', 'registers.perusahaan_id')
+                    ->leftJoin('propinsis', 'perusahaans.alamat_propinsi', 'propinsis.id')
+                    ->paginate(20);
         return view('pages.daftar', ['daftar' => $daftar]);
     }
 
@@ -46,9 +50,15 @@ class DaftarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($perusahaan_id)
     {
         //
+        $perusahaan = Perusahaan::select('perusahaans.*', 'produks.nama', 'perusahaanproduks.hs_code', 'perusahaanproduks.epoch_product_last_export')
+                    ->leftJoin('perusahaanproduks', 'perusahaans.id', 'perusahaanproduks.perusahaan_id')
+                    ->leftJoin('produks', 'perusahaanproduks.produk_id', 'produks.id')
+                    ->where('perusahaans.id', $perusahaan_id)
+                    ->get();
+        return view('pages.detail', ['perusahaan' => $perusahaan]);
     }
 
     /**
