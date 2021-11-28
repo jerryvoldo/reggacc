@@ -26,6 +26,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/daftar', [DaftarController::class, 'index'])->middleware(['auth'])->name('daftar.daftar');
 Route::get('/daftar/{perusahaan_id}', [DaftarController::class, 'show'])->middleware(['auth'])->name('daftar.show');
+Route::get('/daftar/cari', [Cariperusahaan::class, 'docariperusahaan'])->middleware(['auth'])->name('daftar.cari');
 Route::get('/form', [FormController::class, 'viewformdaftar'])->middleware(['auth'])->name('form.daftar');
 Route::get('/form/kabupaten/{propinsi_id}', [Lokasi::class, 'loadKabupaten'])->middleware(['auth'])->name('form.kabupaten');
 Route::get('/form/kecamatan/{kabupaten_id}', [Lokasi::class, 'loadKecamatan'])->middleware(['auth'])->name('form.kecamatan');
@@ -34,5 +35,6 @@ Route::get('/form/kelurahan/{kecamatan_id}', [Lokasi::class, 'loadKelurahan'])->
 
 
 Route::post('/form/storeformdaftar', [FormController::class, 'storeformdaftar'])->middleware(['auth'])->name('form.store');
+Route::post('/daftar/insertregnumber', [DaftarController::class, 'insertregnumber'])->middleware(['auth'])->name('daftar.insertregnumber');
 
 require __DIR__.'/auth.php';

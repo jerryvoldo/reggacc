@@ -1,18 +1,18 @@
 <div>
     @foreach($inputs as $key => $value)
-    <div class="flex flex-row gap-4" wire:key="<?=bin2hex(random_bytes(20))?>">
+    <div class="flex flex-row  gap-4" wire:key="kunci{{ $loop->index }}">
         <div class="mt-4 flex-1">
-            <select  class="bg-gray-100 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="produk[]">
+            <select wire:key="produk-nama-{{ $key }}" class="bg-gray-100 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="produk[]">
                 @foreach($produks as $produk)
                 <option value="{{ $produk->id }}">{{ $produk->nama }}</option>
                 @endforeach
             </select>
         </div>
         <div class="mt-4 flex-1">
-            <input id="hscode" class="bg-gray-100 block rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" type="text"  name="hscode[]" required autofocus />
+            <input wire:key="produk-hscode-{{ $key }}" id="hscode"  class="bg-gray-100 block rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" type="text"  name="hscode[]" required autofocus />
         </div>
         <div class="mt-4 flex-1">
-            <input id="latesttrade" class="bg-gray-100 block rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" type="date" name="latesttrade[]"  required autofocus />
+            <input wire:key="produk-latesttrade-{{ $key }}" id="latesttrade" class="bg-gray-100 block rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" type="date" name="latesttrade[]"  required autofocus />
         </div>
         <div class="flex items-center justify-end mt-4">
         @if($key == 0)

@@ -37,7 +37,7 @@ class FormController extends Controller
         $perusahaan->alamat_rt = $request->alamat_rt;
         $perusahaan->alamat_rw = $request->alamat_rw;
         $perusahaan->alamat_propinsi = $request->alamat_propinsi;
-        $perusahaan->alamat_kabupaten = $request->alamat_propinsi;
+        $perusahaan->alamat_kabupaten = $request->alamat_kabupaten;
         $perusahaan->alamat_kecamatan = $request->alamat_kecamatan;
         $perusahaan->alamat_kelurahan = $request->alamat_kelurahan;
         $perusahaan->nomor_telepon_1 = $request->telepon_1;
@@ -55,7 +55,7 @@ class FormController extends Controller
                 $produk->save();
             }
         }
-        return redirect('form.daftar');    
+        return redirect()->route('daftar.daftar');    
     }
 
     
