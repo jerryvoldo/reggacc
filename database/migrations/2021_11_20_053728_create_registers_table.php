@@ -17,6 +17,7 @@ class CreateRegistersTable extends Migration
             $table->id();
             $table->text('nomor_registrasi')->unique();
             $table->bigInteger('perusahaan_id');
+            $table->bigInteger('plant_id');
             $table->timestamps();
         });
     }

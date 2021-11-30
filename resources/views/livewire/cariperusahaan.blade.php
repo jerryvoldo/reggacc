@@ -45,8 +45,16 @@
                 </td>
                 <td class="border p-1">{{ strtoupper($d->badan_hukum) }} {{ $d->perusahaan_nama }}</td>
                 <td class="border p-1">{{ $d->propinsi_nama }}</td>
-                <td class="border p-1 text-center">
+                <td class="border p-1 text-center flex flex-row gap-4">
                     <a class="bg-gray-700 hover:bg-gray-400 px-1 rounded text-white" href="{{ route('daftar.show', $d->id) }}">detail</a>
+
+                    <a class="bg-yellow-500 hover:bg-yellow-400 px-1 rounded text-white" href="{{ route('daftar.edit', $d->id) }}">Edit</a>
+
+                    <form method="POST" action="{{ route('daftar.destroy', $d->id) }}">
+                        @csrf
+                        <input type="hidden" name="perusahaan_id" value="{{ $d->id }}">
+                        <button type="submit" class="bg-red-700 hover:bg-red-400 px-1 rounded text-white">Delete</button>
+                    </form>
                 </td>
             </tr>
             @endforeach

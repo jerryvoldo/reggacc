@@ -16,6 +16,7 @@ class CreatePerusahaanproduksTable extends Migration
         Schema::create('perusahaanproduks', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('perusahaan_id');
+            $table->bigInteger('plant_id');
             $table->bigInteger('produk_id');
             $table->text('hs_code');
             $table->bigInteger('epoch_product_last_export');

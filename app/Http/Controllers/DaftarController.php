@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Register;
 use App\Models\Perusahaan;
 use App\Models\Propinsi;
+use App\Models\Tipesarana;
+use App\Models\Perusahaanproduk;
 
 class DaftarController extends Controller
 {
@@ -70,9 +72,22 @@ class DaftarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($perusahaan_id)
     {
         //
+        $tipesarana = Tipesarana::all();
+        $perusahaan = Perusahaan::select('registers.nomor_registrasi', 'perusahaans.*', 'produks.nama as produk_nama', 'perusahaanproduks.hs_code', 'perusahaanproduks.epoch_product_last_export', 'kelurahans.nama as kelurahan', 'kecamatans.nama as kecamatan', 'kabupatens.nama as kabupaten', 'propinsis.nama as propinsi', 'tipesaranas.tipe as tipesarana')
+                    ->leftJoin('perusahaanproduks', 'perusahaans.id', 'perusahaanproduks.perusahaan_id')
+                    ->leftJoin('produks', 'perusahaanproduks.produk_id', 'produks.id')
+                    ->leftJoin('kelurahans', 'perusahaans.alamat_kelurahan', 'kelurahans.id')
+                    ->leftJoin('kecamatans', 'perusahaans.alamat_kecamatan', 'kecamatans.id')
+                    ->leftJoin('kabupatens', 'perusahaans.alamat_kabupaten', 'kabupatens.id')
+                    ->leftJoin('propinsis', 'perusahaans.alamat_propinsi', 'propinsis.id')
+                    ->leftJoin('tipesaranas', 'perusahaans.tipesarana_id', 'tipesaranas.id')
+                    ->leftJoin('registers', 'perusahaans.id', 'registers.perusahaan_id')
+                    ->where('perusahaans.id', $perusahaan_id)
+                    ->get();
+        return view('pages.edit', ['perusahaan' => $perusahaan, 'tipesarana' => $tipesarana]);
     }
 
     /**
@@ -82,9 +97,37 @@ class DaftarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
+        // dd($request);
+        $perusahaan = Perusahaan::find($request->perusahaan_id);
+        $perusahaan->badan_hukum = $request->badan_hukum;
+        $perusahaan->nama = $request->nama;
+        $perusahaan->tipesarana_id = $request->tipesarana;
+        $perusahaan->alamat_jalan = $request->alamat_jalan;
+        $perusahaan->alamat_rt = $request->alamat_rt;
+        $perusahaan->alamat_rw = $request->alamat_rw;
+        $perusahaan->alamat_propinsi = $request->alamat_propinsi;
+        $perusahaan->alamat_kabupaten = $request->alamat_kabupaten;
+        $perusahaan->alamat_kecamatan = $request->alamat_kecamatan;
+        $perusahaan->alamat_kelurahan = $request->alamat_kelurahan;
+        $perusahaan->nomor_telepon_1 = $request->telepon_1;
+        $perusahaan->nomor_telepon_2 = $request->telepon_2;
+        $perusahaan->email = $request->email;
+
+        if($perusahaan->save())
+        {
+            foreach($request->perusahaanproduk_id as $key=>$item)
+            {
+                $produk = Perusahaanproduk::find($item);
+                $produk->perusahaan_id = $perusahaan->id;
+                $produk->hs_code = $request->hscode[$key];
+                $produk->epoch_product_last_export = strtotime($request->latesttrade[$key]);
+                $produk->save();
+            }
+        }
+        return redirect()->route('daftar.daftar');
     }
 
     /**
@@ -93,9 +136,16 @@ class DaftarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         //
+        $perusahaan = Perusahaan::find($request->perusahaan_id);
+        if($perusahaan->delete())
+        {
+            $produk = Perusahaanproduk::find($request->perusahaan_id);
+            $produk->delete();
+        }
+        return redirect()->route('daftar.daftar');
     }
 
     public function insertregnumber(Request $request)
@@ -134,6 +184,6 @@ class DaftarController extends Controller
         }
         $kode_cina = Propinsi::select('kode_cina')->where('id', $propinsi_id)->first();
         
-        return $prefix.$urutan.$kode_cina->kode_cina;
+        return $prefix.$urutan."-".$kode_cina->kode_cina;
     }
 }
