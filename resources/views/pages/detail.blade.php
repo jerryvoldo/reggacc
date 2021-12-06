@@ -10,11 +10,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                     @if($perusahaan[0]->nomor_registrasi != null)
-                    <div class="mb-4 bg-green-500 border border-green-600 p-1 rounded rounded-xl text-white font-bold text-center text-2xl">
-                        {{ $perusahaan[0]->nomor_registrasi }}
-                    </div>
-                    @endif
                     <table class="border border-collapse w-full table-auto">
                         <tr>
                             <th class="border text-right px-3 py-2">Nama Perusahaan</th>
@@ -33,26 +28,39 @@
                             <td class="border px-3">{{ $perusahaan[0]->propinsi }}</td>
                         </tr>
                         <tr>
-                            <th class="border text-right px-3 py-2">Tipe Perusahaan</th>
-                            <td class="border px-3">{{ $perusahaan[0]->tipesarana }}</td>
-                        </tr>
-                        <tr>
-                            <th class="border text-right px-3">Rincian Produk </th>
+                            <th class="border text-right px-3">Daftar Plant</th>
                             <td class="border p-3">
+                                <div class="flex items-center justify-end mt-2 mb-2">
+                                    <x-button class="ml-3" onclick="Livewire.emit('openModal', 'modaltambahplant', {{ json_encode(['perusahaan_id' => $perusahaan[0]->id] ) }})">
+                                        {{ __('+ Tambah Plant') }}
+                                    </x-button>
+                                </div>
                                 <table class="w-full">
                                     <thead>
                                         <tr>
-                                            <th class="border bg-gray-100 p-1">Produk</th>
-                                            <th class="border bg-gray-100 p-1">HS Code</th>
-                                            <th class="border bg-gray-100 p-1">Tanggal Terakhir Ekspor</th>
+                                            <th class="border bg-gray-100 p-1 w-1/5">Registrasi GACC</th>
+                                            <th class="border bg-gray-100 p-1 w-1/5">Nama</th>
+                                            <th class="border bg-gray-100 p-1 w-2/5">Alamat</th>
+                                            <th class="border bg-gray-100 p-1 w-1/5">Propinsi</th>
+                                            <th class="border bg-gray-100 p-1">Data Registrasi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($perusahaan as $produk)
+                                        @foreach($plants as $plant)
                                         <tr>
-                                            <td class="border pl-2">{{ $produk->produk_nama }}</td>
-                                            <td class="border text-center">{{ $produk->hs_code }}</td>
-                                            <td class="border text-center">{{ date('d F Y', $produk->epoch_product_last_export) }}</td>
+                                            <td class="border p-1">
+                                                @if(!isset($plant->nomor_registrasi))
+                                                <div class="text-center bg-yellow-300 text-black rounded rounded-lg border border-yellow-100 px-2 uppercase font-bold text-xs">belum ada</div>
+                                                @else
+                                                <div class="text-center bg-green-300 text-whitek rounded rounded-lg border border-green-100 px-2 uppercase font-bold text-xs">{{ $plants[0]->nomor_registrasi }}</div>
+                                                @endif
+                                            </td>
+                                            <td class="border p-1">{{ $plant->nama_plant }}</td>
+                                            <td class="border p-1">Jl. {{ $plant->alamat_jalan }}, RT {{ $plant->alamat_rt }} RW {{ $plant->alamat_rw }}, Kelurahan {{ $plant->kelurahan }}, Kecamatan {{ $plant->kecamatan }}</td>
+                                                <td class="border p-1">{{ $plant->propinsi }}</td>
+                                            <td class="border p-1">
+                                                <div class="border border-gray-100 p-0.5 text-center uppercase text-xs font-bold hover:bg-gray-400  rounded rounded-lg bg-gray-300"><a href="{{ route('daftar.show.plant', $plant->id) }}">Lihat</a></div>
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -60,16 +68,6 @@
                             </td>
                         </tr>
                     </table>
-
-                    <div>
-                        @if($perusahaan[0]->nomor_registrasi == null)
-                        <form method="POST" action="{{ route('daftar.insertregnumber') }}">
-                            @csrf
-                            <input type="hidden" name="perusahaan_id" value="{{ $perusahaan[0]->id }}">
-                        <button type="submit" class="block w-full mt-4 hover:bg-green-400 uppercase text-xs hover:font-bold border-green-800 border bg-green-500 text-white p-1 rounded">Generate No Registrasi</button>
-                        </form>
-                        @endif
-                    </div>
                 </div>
             </div>
         </div>

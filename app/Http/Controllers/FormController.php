@@ -32,7 +32,6 @@ class FormController extends Controller
         $perusahaan = new Perusahaan;
         $perusahaan->badan_hukum = $request->badan_hukum;
         $perusahaan->nama = $request->nama;
-        $perusahaan->tipesarana_id = $request->tipesarana;
         $perusahaan->alamat_jalan = $request->alamat_jalan;
         $perusahaan->alamat_rt = $request->alamat_rt;
         $perusahaan->alamat_rw = $request->alamat_rw;
@@ -43,18 +42,8 @@ class FormController extends Controller
         $perusahaan->nomor_telepon_1 = $request->telepon_1;
         $perusahaan->nomor_telepon_2 = $request->telepon_2;
         $perusahaan->email = $request->email;
-        if($perusahaan->save())
-        {
-            foreach($request->produk as $key=>$item)
-            {
-                $produk = new Perusahaanproduk;
-                $produk->perusahaan_id = $perusahaan->id;
-                $produk->produk_id = $item;
-                $produk->hs_code = $request->hscode[$key];
-                $produk->epoch_product_last_export = strtotime($request->latesttrade[$key]);
-                $produk->save();
-            }
-        }
+        $perusahaan->save();
+
         return redirect()->route('daftar.daftar');    
     }
 

@@ -10,10 +10,10 @@
     <table class="border border-collapse w-full table-auto">
         <thead>
             <tr>
-                <th class="border w-1/5 bg-gray-100 py-2">No. Registrasi GACC</th>
                 <th class="border w-2/5 bg-gray-100 py-2">Nama Perusahaan</th>
-                <th class="border w-1/5 bg-gray-100 py-2">Provinsi</th>
-                <th class="border w-1/5 bg-gray-100 py-2">Aksi</th>
+                <th class="border w-1/5 bg-gray-100 py-2">Jumlah Plant</th>
+                <th class="border w-1/5 bg-gray-100 py-2">Jumlah Produk</th>
+                <th class="border w-1/5 bg-gray-100 py-2"></th>
             </tr>
         </thead>
         <tbody>
@@ -32,19 +32,9 @@
             @else
             @foreach($daftar as $d)
             <tr>
-                <td class="border p-1">
-                    @if($d->nomor_registrasi == null)
-                    <div class="bg-yellow-500 font-black text-xs uppercase border border-yellow-600 px-2 py-1 rounded rounded-xl text-center">
-                        belum ada
-                    </div>
-                    @else
-                    <div class="bg-green-500 font-black text-sm uppercase border border-green-600 px-2 py-1 rounded rounded-xl text-center">
-                        {{ $d->nomor_registrasi }}
-                    </div>
-                    @endif
-                </td>
                 <td class="border p-1">{{ strtoupper($d->badan_hukum) }} {{ $d->perusahaan_nama }}</td>
-                <td class="border p-1">{{ $d->propinsi_nama }}</td>
+                <td class="border p-1">15</td>
+                <td class="border p-1">10</td>
                 <td class="border p-1 text-center flex flex-row gap-4">
                     <a class="bg-gray-700 hover:bg-gray-400 px-1 rounded text-white" href="{{ route('daftar.show', $d->id) }}">detail</a>
 

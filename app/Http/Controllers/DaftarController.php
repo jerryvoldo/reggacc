@@ -8,6 +8,7 @@ use App\Models\Perusahaan;
 use App\Models\Propinsi;
 use App\Models\Tipesarana;
 use App\Models\Perusahaanproduk;
+use App\Models\Plant;
 
 class DaftarController extends Controller
 {
@@ -52,18 +53,32 @@ class DaftarController extends Controller
     public function show($perusahaan_id)
     {
         //
-        $perusahaan = Perusahaan::select('registers.nomor_registrasi', 'perusahaans.*', 'produks.nama as produk_nama', 'perusahaanproduks.hs_code', 'perusahaanproduks.epoch_product_last_export', 'kelurahans.nama as kelurahan', 'kecamatans.nama as kecamatan', 'kabupatens.nama as kabupaten', 'propinsis.nama as propinsi', 'tipesaranas.tipe as tipesarana')
-                    ->leftJoin('perusahaanproduks', 'perusahaans.id', 'perusahaanproduks.perusahaan_id')
-                    ->leftJoin('produks', 'perusahaanproduks.produk_id', 'produks.id')
+        $perusahaan = Perusahaan::select('perusahaans.*', 'kelurahans.nama as kelurahan', 'kecamatans.nama as kecamatan', 'kabupatens.nama as kabupaten', 'propinsis.nama as propinsi')
                     ->leftJoin('kelurahans', 'perusahaans.alamat_kelurahan', 'kelurahans.id')
                     ->leftJoin('kecamatans', 'perusahaans.alamat_kecamatan', 'kecamatans.id')
                     ->leftJoin('kabupatens', 'perusahaans.alamat_kabupaten', 'kabupatens.id')
                     ->leftJoin('propinsis', 'perusahaans.alamat_propinsi', 'propinsis.id')
-                    ->leftJoin('tipesaranas', 'perusahaans.tipesarana_id', 'tipesaranas.id')
-                    ->leftJoin('registers', 'perusahaans.id', 'registers.perusahaan_id')
                     ->where('perusahaans.id', $perusahaan_id)
                     ->get();
-        return view('pages.detail', ['perusahaan' => $perusahaan]);
+        $plants = Plant::select('registers.nomor_registrasi', 'plants.id', 'plants.nama_plant', 'plants.alamat_jalan', 'plants.alamat_rt', 'plants.alamat_rw', 'plants.nomor_registrasi', 'kelurahans.nama as kelurahan', 'kecamatans.nama as kecamatan', 'propinsis.nama as propinsi')
+                        ->join('registers', 'plants.id', 'registers.plant_id')
+                        ->leftJoin('kelurahans', 'plants.alamat_kelurahan', 'kelurahans.id')
+                        ->leftJoin('kecamatans', 'plants.alamat_kecamatan', 'kecamatans.id')
+                        ->leftJoin('kabupatens', 'plants.alamat_kabupaten', 'kabupatens.id')
+                        ->leftJoin('propinsis', 'plants.alamat_propinsi', 'propinsis.id')
+                        ->where('plants.perusahaan_id', $perusahaan_id)->get();
+        return view('pages.detail', ['perusahaan' => $perusahaan, 'plants' => $plants]);
+    }
+
+    public function showplant($plant_id)
+    {
+        $plants = Plant::where('id', $plant_id)->get();
+        $perusahaan = Perusahaan::select('nama', 'badan_hukum')->where('id', $plants[0]->perusahaan_id)->first();
+        $produks = Perusahaanproduk::select('registers.nomor_registrasi', 'produks.nama', 'perusahaanproduks.hs_code', 'perusahaanproduks.epoch_product_last_export')
+                                    ->leftJoin('produks','perusahaanproduks.produk_id', 'produks.id')
+                                    ->leftJoin('registers', 'perusahaanproduks.plant_id', 'registers.plant_id')
+                                    ->where('perusahaanproduks.plant_id', $plant_id)->get();
+        return view('pages.detailplant', ['plants' => $plants, 'produks' => $produks, 'perusahaan' => $perusahaan]);
     }
 
     /**
