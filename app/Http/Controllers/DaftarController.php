@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Register;
 use App\Models\Perusahaan;
 use App\Models\Propinsi;
@@ -60,19 +61,21 @@ class DaftarController extends Controller
                     ->leftJoin('propinsis', 'perusahaans.alamat_propinsi', 'propinsis.id')
                     ->where('perusahaans.id', $perusahaan_id)
                     ->get();
-        $plants = Plant::select('registers.nomor_registrasi', 'plants.id', 'plants.nama_plant', 'plants.alamat_jalan', 'plants.alamat_rt', 'plants.alamat_rw', 'plants.nomor_registrasi', 'kelurahans.nama as kelurahan', 'kecamatans.nama as kecamatan', 'propinsis.nama as propinsi')
-                        ->join('registers', 'plants.id', 'registers.plant_id')
+        $plants = Plant::select('registers.nomor_registrasi', 'plants.id', 'plants.nama_plant', 'perusahaans.nama as perusahaan', 'plants.alamat_jalan', 'plants.alamat_rt', 'plants.alamat_rw', 'kelurahans.nama as kelurahan', 'kecamatans.nama as kecamatan', 'kabupatens.nama as kabupaten', 'propinsis.nama as propinsi')
+                        ->leftJoin('registers', 'plants.id', 'registers.plant_id')
+                        ->leftJoin('perusahaans', 'plants.perusahaan_id', 'perusahaans.id')
                         ->leftJoin('kelurahans', 'plants.alamat_kelurahan', 'kelurahans.id')
                         ->leftJoin('kecamatans', 'plants.alamat_kecamatan', 'kecamatans.id')
                         ->leftJoin('kabupatens', 'plants.alamat_kabupaten', 'kabupatens.id')
                         ->leftJoin('propinsis', 'plants.alamat_propinsi', 'propinsis.id')
                         ->where('plants.perusahaan_id', $perusahaan_id)->get();
+
         return view('pages.detail', ['perusahaan' => $perusahaan, 'plants' => $plants]);
     }
 
     public function showplant($plant_id)
     {
-        $plants = Plant::where('id', $plant_id)->get();
+        $plants = Plant::select('plants.*', 'registers.nomor_registrasi')->where('plants.id', $plant_id)->leftJoin('registers', 'plants.id', 'registers.plant_id')->get();
         $perusahaan = Perusahaan::select('nama', 'badan_hukum')->where('id', $plants[0]->perusahaan_id)->first();
         $produks = Perusahaanproduk::select('registers.nomor_registrasi', 'produks.nama', 'perusahaanproduks.hs_code', 'perusahaanproduks.epoch_product_last_export')
                                     ->leftJoin('produks','perusahaanproduks.produk_id', 'produks.id')

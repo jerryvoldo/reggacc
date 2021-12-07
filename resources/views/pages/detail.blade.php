@@ -52,7 +52,7 @@
                                                 @if(!isset($plant->nomor_registrasi))
                                                 <div class="text-center bg-yellow-300 text-black rounded rounded-lg border border-yellow-100 px-2 uppercase font-bold text-xs">belum ada</div>
                                                 @else
-                                                <div class="text-center bg-green-300 text-whitek rounded rounded-lg border border-green-100 px-2 uppercase font-bold text-xs">{{ $plants[0]->nomor_registrasi }}</div>
+                                                <div class="text-center bg-green-300 text-whitek rounded rounded-lg border border-green-100 px-2 uppercase font-bold text-xs">{{ $plant->nomor_registrasi }}</div>
                                                 @endif
                                             </td>
                                             <td class="border p-1">{{ $plant->nama_plant }}</td>

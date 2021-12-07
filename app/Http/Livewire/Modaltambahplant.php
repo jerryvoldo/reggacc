@@ -17,6 +17,7 @@ class Modaltambahplant extends ModalComponent
 {
     public $tipesarana;
     public $nama_plant;
+    public $perusahaan_id;
     public $tipesarana_id;
     public $alamat_jalan;
     public $alamat_rt;
