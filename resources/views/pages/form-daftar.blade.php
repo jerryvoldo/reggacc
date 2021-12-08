@@ -21,10 +21,14 @@
                                     <option value="cv">CV</option>
                                 </select>
                             </div>
-
                             <div class="mt-4">
                                 <x-label for="nama" :value="__('Nama Perusahaan')" />
                                 <x-input id="nama" class="bg-gray-100 block mt-1 w-full" type="text" name="nama" :value="old('nama')" required autofocus />
+                            </div>
+                            <div class="mt-4">
+                                <x-label for="npwp" :value="__('NPWP')" />
+                                <x-input id="npwp" class="bg-gray-100 block mt-1 w-full" type="text" name="npwp" :value="old('npwp')" required autofocus />
+                                <small class="italic">Input NPWP contoh 092542943407000 tanpa tanda baca</small>
                             </div>
                         </fieldset>
 

@@ -16,7 +16,6 @@ class CreateRegistersTable extends Migration
         Schema::create('registers', function (Blueprint $table) {
             $table->id();
             $table->text('nomor_registrasi')->unique();
-            $table->bigInteger('perusahaan_id');
             $table->bigInteger('plant_id');
             $table->timestamps();
         });
