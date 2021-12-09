@@ -11,6 +11,7 @@
     <div class="mt-4 flex-1">
         <x-label for="kotakabupaten" :value="__('Kota/Kabupaten')" />
         <select wire:model="kabupaten_id" wire:change="loadKecamatan" class="bg-gray-100 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="alamat_kabupaten">
+            <option value="">--Pilih Kabupaten--</option>
             @if($daftarkabupaten != null)
                 @foreach($daftarkabupaten as $kabupaten)
                 <option value="{{ $kabupaten->id }}">{{ $kabupaten->nama }}</option>
@@ -21,6 +22,7 @@
     <div class="mt-4 flex-1">
         <x-label for="kecamatan" :value="__('Kecamatan')" />
         <select wire:model="kecamatan_id" wire:change="loadKelurahan" class="bg-gray-100 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="alamat_kecamatan">
+            <option value="">--Pilih Kecamatan--</option>
             @if($daftarkecamatan != null)
                 @foreach($daftarkecamatan as $kecamatan)
                 <option value="{{ $kecamatan->id }}">{{ $kecamatan->nama }}</option>
@@ -31,6 +33,7 @@
     <div class="mt-4 flex-1">
         <x-label for="kelurahan" :value="__('Kelurahan')" />
         <select  class="bg-gray-100 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="alamat_kelurahan">
+            <option value="">--Pilih Kelurahan--</option>
             @if($daftarkelurahan != null)
                 @foreach($daftarkelurahan as $kelurahan)
                 <option value="{{ $kelurahan->id }}">{{ $kelurahan->nama }}</option>

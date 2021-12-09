@@ -31,8 +31,8 @@
             @foreach($daftar as $d)
             <tr>
                 <td class="border p-1">{{ strtoupper($d->badan_hukum) }} {{ $d->perusahaan_nama }}</td>
-                <td class="border p-1">15</td>
-                <td class="border p-1">10</td>
+                <td class="border p-1">{{ $d->jumlah_plant }}</td>
+                <td class="border p-1">{{ $d->jumlah_produk }}</td>
                 <td class="border p-1 text-center flex flex-row gap-4">
                     <a class="bg-gray-700 hover:bg-gray-400 px-2 rounded text-white" href="{{ route('daftar.show', $d->id) }}">+ Plant</a>
 

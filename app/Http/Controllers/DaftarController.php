@@ -94,17 +94,13 @@ class DaftarController extends Controller
     {
         //
         $tipesarana = Tipesarana::all();
-        $perusahaan = Perusahaan::select('registers.nomor_registrasi', 'perusahaans.*', 'produks.nama as produk_nama', 'perusahaanproduks.hs_code', 'perusahaanproduks.epoch_product_last_export', 'kelurahans.nama as kelurahan', 'kecamatans.nama as kecamatan', 'kabupatens.nama as kabupaten', 'propinsis.nama as propinsi', 'tipesaranas.tipe as tipesarana')
-                    ->leftJoin('perusahaanproduks', 'perusahaans.id', 'perusahaanproduks.perusahaan_id')
-                    ->leftJoin('produks', 'perusahaanproduks.produk_id', 'produks.id')
+        $perusahaan = Perusahaan::select('perusahaans.*','kelurahans.nama as kelurahan', 'kecamatans.nama as kecamatan', 'kabupatens.nama as kabupaten', 'propinsis.nama as propinsi')
                     ->leftJoin('kelurahans', 'perusahaans.alamat_kelurahan', 'kelurahans.id')
                     ->leftJoin('kecamatans', 'perusahaans.alamat_kecamatan', 'kecamatans.id')
                     ->leftJoin('kabupatens', 'perusahaans.alamat_kabupaten', 'kabupatens.id')
                     ->leftJoin('propinsis', 'perusahaans.alamat_propinsi', 'propinsis.id')
-                    ->leftJoin('tipesaranas', 'perusahaans.tipesarana_id', 'tipesaranas.id')
-                    ->leftJoin('registers', 'perusahaans.id', 'registers.perusahaan_id')
                     ->where('perusahaans.id', $perusahaan_id)
-                    ->get();
+                    ->first();
         return view('pages.edit', ['perusahaan' => $perusahaan, 'tipesarana' => $tipesarana]);
     }
 
@@ -122,7 +118,7 @@ class DaftarController extends Controller
         $perusahaan = Perusahaan::find($request->perusahaan_id);
         $perusahaan->badan_hukum = $request->badan_hukum;
         $perusahaan->nama = $request->nama;
-        $perusahaan->tipesarana_id = $request->tipesarana;
+        $perusahaan->npwp = $request->npwp;
         $perusahaan->alamat_jalan = $request->alamat_jalan;
         $perusahaan->alamat_rt = $request->alamat_rt;
         $perusahaan->alamat_rw = $request->alamat_rw;
@@ -133,18 +129,8 @@ class DaftarController extends Controller
         $perusahaan->nomor_telepon_1 = $request->telepon_1;
         $perusahaan->nomor_telepon_2 = $request->telepon_2;
         $perusahaan->email = $request->email;
+        $perusahaan->save();
 
-        if($perusahaan->save())
-        {
-            foreach($request->perusahaanproduk_id as $key=>$item)
-            {
-                $produk = Perusahaanproduk::find($item);
-                $produk->perusahaan_id = $perusahaan->id;
-                $produk->hs_code = $request->hscode[$key];
-                $produk->epoch_product_last_export = strtotime($request->latesttrade[$key]);
-                $produk->save();
-            }
-        }
         return redirect()->route('daftar.daftar');
     }
 
