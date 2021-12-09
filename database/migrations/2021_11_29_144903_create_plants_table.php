@@ -16,6 +16,8 @@ class CreatePlantsTable extends Migration
         Schema::create('plants', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('perusahaan_id');
+            $table->text('nama_plant');
+            $table->text('nomor_registrasi');
             $table->text('alamat_jalan');
             $table->text('alamat_rt');
             $table->text('alamat_rw');

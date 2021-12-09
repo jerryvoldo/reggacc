@@ -24,6 +24,7 @@ class Cariperusahaan extends Component
     {
         $this->daftar = Perusahaan::select('perusahaans.id', 'perusahaans.badan_hukum', 'perusahaans.nama as perusahaan_nama', 'propinsis.nama as propinsi_nama')                    ->leftJoin('propinsis', 'perusahaans.alamat_propinsi', 'propinsis.id')
                     ->where('perusahaans.nama', 'ilike', '%'.$this->searchstring.'%')
+                    ->orWhere('perusahaans.npwp', 'like', '%'.$this->searchstring.'%')
                     ->orderBy('perusahaans.nama', 'asc')
                     ->get();
     }

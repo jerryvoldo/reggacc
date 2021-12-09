@@ -17,16 +17,17 @@ class CreatePerusahaansTable extends Migration
             $table->id();
             $table->text('badan_hukum');
             $table->text('nama');
+            $table->text('npwp');
             $table->text('alamat_jalan');
             $table->text('alamat_rt');
             $table->text('alamat_rw');
             $table->bigInteger('alamat_kelurahan');
             $table->bigInteger('alamat_kecamatan');
+            $table->bigInteger('alamat_kabupaten');
             $table->bigInteger('alamat_provinsi');
             $table->text('nomor_telepon_1')->nullable();
             $table->text('nomor_telepon_2')->nullable();
             $table->text('email')->nullable();
-            $table->bigInteger('tipesarana_id');
             $table->timestamps();
         });
     }
