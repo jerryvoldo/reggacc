@@ -12,7 +12,8 @@
     <table class="border border-collapse w-full table-auto">
         <thead>
             <tr>
-                <th class="border w-2/5 bg-gray-100 py-2">Nama Perusahaan</th>
+                <th class="border w-1/5 bg-gray-100 py-2">Nama Perusahaan</th>
+                <th class="border w-1/5 bg-gray-100 py-2">Propinsi</th>
                 <th class="border w-1/5 bg-gray-100 py-2">Jumlah Plant</th>
                 <th class="border w-1/5 bg-gray-100 py-2">Jumlah Produk</th>
                 <th class="border w-1/5 bg-gray-100 py-2"></th>
@@ -31,6 +32,7 @@
             @foreach($daftar as $d)
             <tr>
                 <td class="border p-1">{{ strtoupper($d->badan_hukum) }} {{ $d->perusahaan_nama }}</td>
+                <td class="border p-1">{{ $d->propinsi_nama }}</td>
                 <td class="border p-1">{{ $d->jumlah_plant }}</td>
                 <td class="border p-1">{{ $d->jumlah_produk }}</td>
                 <td class="border p-1 text-center flex flex-row gap-4">

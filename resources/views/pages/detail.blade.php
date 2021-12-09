@@ -43,6 +43,7 @@
                                             <th class="border bg-gray-100 p-1 w-2/5">Alamat</th>
                                             <th class="border bg-gray-100 p-1 w-1/5">Propinsi</th>
                                             <th class="border bg-gray-100 p-1">Data Registrasi</th>
+                                            <th class="border bg-gray-100 p-1"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -60,6 +61,9 @@
                                                 <td class="border p-1">{{ $plant->propinsi }}</td>
                                             <td class="border p-1">
                                                 <div class="border border-gray-100 p-0.5 text-center uppercase text-xs font-bold hover:bg-gray-400  rounded rounded-lg bg-gray-300"><a href="{{ route('daftar.show.plant', $plant->id) }}">Lihat</a></div>
+                                            </td>
+                                            <td class="border p-1">
+                                                 <button class="bg-yellow-500 hover:bg-yellow-400 p-0.5 rounded  rounded-lg text-center uppercase text-white text-xs font-bold" href="" onclick="Livewire.emit('openModal', 'updateplantdata', {{ json_encode(['plant_id' => $plant->id] ) }})">Edit</button>
                                             </td>
                                         </tr>
                                         @endforeach

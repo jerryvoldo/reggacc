@@ -26,9 +26,13 @@ class Cariperusahaan extends Component
 
     public function docariperusahaan()
     {
-        $this->daftar = Perusahaan::select('perusahaans.id', 'perusahaans.badan_hukum', 'perusahaans.nama as perusahaan_nama', 'propinsis.nama as propinsi_nama')                    ->leftJoin('propinsis', 'perusahaans.alamat_propinsi', 'propinsis.id')
+        $this->daftar = Perusahaan::select('perusahaans.id', 'perusahaans.badan_hukum',  'perusahaans.nama as perusahaan_nama', 'propinsis.nama as propinsi_nama', DB::raw('count(DISTINCT (plants.id)) as jumlah_plant'), DB::raw('count(perusahaanproduks.id) as jumlah_produk'))
+                    ->leftJoin('propinsis', 'perusahaans.alamat_propinsi', 'propinsis.id')
+                    ->leftJoin('plants', 'perusahaans.id', 'plants.perusahaan_id')
+                    ->leftJoin('perusahaanproduks', 'plants.id', 'perusahaanproduks.plant_id')
                     ->where('perusahaans.nama', 'ilike', '%'.$this->searchstring.'%')
                     ->orWhere('perusahaans.npwp', 'like', '%'.$this->searchstring.'%')
+                    ->groupBy('perusahaans.id', 'perusahaans.badan_hukum',  'perusahaans.nama', 'propinsis.nama')
                     ->orderBy('perusahaans.nama', 'asc')
                     ->get();
     }

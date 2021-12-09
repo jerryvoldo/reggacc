@@ -13,7 +13,7 @@ use App\Models\Kelurahan;
 use App\Models\Register;
 
 
-class Modaltambahplant extends ModalComponent
+class Updateplantdata extends ModalComponent
 {
     public $tipesarana;
     public $nama_plant;
@@ -86,55 +86,12 @@ class Modaltambahplant extends ModalComponent
         return redirect(request()->header('Referer'));
     }
 
-    private function insertregnumber($plant_id)
-    {
-        $propinsi_id = Plant::select('alamat_propinsi as propinsi')->where('id', $plant_id)->first();
-        $newregnumber = new Register;
-        $newregnumber->nomor_registrasi = $this->generateregnumber($propinsi_id->propinsi, $plant_id);
-        $newregnumber->plant_id = $plant_id;
+    
 
-        $newregnumber->save();
-    }
-
-    private function generateregnumber($propinsi_id, $plant_id)
-    {
-        $urutan = '';
-        $prefix = 'CR-IFDA-';
-        $jumlah_digit = strlen ((string) $plant_id);
-        switch ($jumlah_digit) {
-            case 1:
-                $urutan = '000'.$plant_id;
-                break;
-
-            case 2:
-                $urutan = '00'.$plant_id;
-                break;
-
-            case 3:
-                $urutan = '0'.$plant_id;
-                break;
-
-            case 4:
-                $urutan = $plant_id;
-                break;
-        }
-        $kode_cina = Propinsi::select('kode_cina')->where('id', $propinsi_id)->first();
-        
-        return $prefix.$urutan."-".$kode_cina->kode_cina;
-    }
-
-    public function mount($perusahaan_id = null, $plant_id = null)
+    public function mount($plant_id)
     {
         $this->propinsi = Propinsi::all();
-        
-        if($perusahaan_id != null) {
-            $this->perusahaan_id = $perusahaan_id;
-        }
-        
-        if($plant_id != null) 
-        {
-            $this->plant_id = $plant_id;
-        }
+        $this->plant_id = $plant_id;
     }
 
     public function loadKabupaten()
@@ -158,6 +115,25 @@ class Modaltambahplant extends ModalComponent
     public function render()
     {
         $this->tipesarana = Tipesarana::all();
-        return view('livewire.modaltambahplant');
+        $plant = Plant::select('plants.*', 'propinsis.nama as propinsi_nama', 'kabupatens.nama as kabupaten_nama', 'kecamatans.nama as kecamatan_nama', 'kelurahans.nama as kelurahan_nama')
+                        ->leftJoin('kelurahans', 'plants.alamat_kelurahan', 'kelurahans.id')
+                        ->leftJoin('kecamatans', 'plants.alamat_kecamatan', 'kecamatans.id')
+                        ->leftJoin('kabupatens', 'plants.alamat_kabupaten', 'kabupatens.id')
+                        ->leftJoin('propinsis', 'plants.alamat_propinsi', 'propinsis.id')
+                        ->where('plants.id', $this->plant_id)->first();
+
+         $this->tipesarana_id = $plant->tipesarana_id;
+         $this->nama_plant = $plant->nama_plant;
+         $this->alamat_jalan = $plant->alamat_jalan;
+         $this->alamat_rt = $plant->alamat_rt;
+         $this->alamat_rw = $plant->alamat_rw;
+         $this->telepon_1 = $plant->nomor_telepon_1;
+         $this->telepon_2 = $plant->nomor_telepon_2;
+         $this->propinsi_id = $plant->alamat_propinsi;
+         $this->kabupaten_id = $plant->alamat_kabupaten;
+         $this->kecamatan_id = $plant->alamat_kecamatan;
+         $this->kelurahan_id = $plant->alamat_kelurahan;
+         $this->email = $plant->email;
+        return view('livewire.updateplantdata');
     }
 }

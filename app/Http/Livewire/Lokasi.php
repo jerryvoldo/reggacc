@@ -23,6 +23,7 @@ class Lokasi extends Component
     public function mount()
     {
         $this->propinsi = Propinsi::all();
+        $this->loadKabupaten();
     }
 
     public function loadKabupaten()
