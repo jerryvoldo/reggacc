@@ -73,6 +73,38 @@ class DaftarController extends Controller
         return view('pages.detail', ['perusahaan' => $perusahaan, 'plants' => $plants]);
     }
 
+    public function cetakdetail($perusahaan_id)
+    {
+         $plants = Plant::select('tipesaranas.tipe', 'registers.nomor_registrasi', 'plants.id', 'plants.nama_plant','perusahaans.badan_hukum as perusahaan_badan_hukum', 'perusahaans.nama as perusahaan', 'plants.alamat_jalan', 'plants.alamat_rt', 'plants.alamat_rw', 'kelurahans.nama as kelurahan', 'kecamatans.nama as kecamatan', 'kabupatens.nama as kabupaten', 'propinsis.nama as propinsi')
+                        ->leftJoin('tipesaranas', 'plants.tipesarana_id', 'tipesaranas.id')
+                        ->leftJoin('registers', 'plants.id', 'registers.plant_id')
+                        ->leftJoin('perusahaans', 'plants.perusahaan_id', 'perusahaans.id')
+                        ->leftJoin('kelurahans', 'plants.alamat_kelurahan', 'kelurahans.id')
+                        ->leftJoin('kecamatans', 'plants.alamat_kecamatan', 'kecamatans.id')
+                        ->leftJoin('kabupatens', 'plants.alamat_kabupaten', 'kabupatens.id')
+                        ->leftJoin('propinsis', 'plants.alamat_propinsi', 'propinsis.id')
+                        ->orderBy('perusahaans.id', 'asc')
+                        ->get()->toArray();
+        
+        $rekapitulasi = [];
+
+        foreach($plants as $key => $plant)
+        {
+            $rekapitulasi[$key]= $plant;
+            $produks = Perusahaanproduk::leftJoin('produks', 'perusahaanproduks.produk_id', 'produks.id')
+                                        ->select('produks.nama as produk_nama',  'perusahaanproduks.*')
+                                        ->where('perusahaanproduks.plant_id', $plant['id'])
+                                        ->get()
+                                        ->toArray();
+            foreach($produks as $key_produk => $produk)
+            {
+                $rekapitulasi[$key]['produks'][$key_produk] = $produk;
+            }
+        }
+
+        return view('pages.cetakdetail', ['details' => $rekapitulasi]);
+    }
+
     public function showplant($plant_id)
     {
         $plants = Plant::select('plants.*', 'registers.nomor_registrasi')->where('plants.id', $plant_id)->leftJoin('registers', 'plants.id', 'registers.plant_id')->get();
