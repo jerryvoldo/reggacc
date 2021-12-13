@@ -26,7 +26,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/daftar', [DaftarController::class, 'index'])->middleware(['auth'])->name('daftar.daftar');
 Route::get('/daftar/{perusahaan_id}', [DaftarController::class, 'show'])->middleware(['auth'])->name('daftar.show');
-Route::get('/daftar/{perusahaan_id}/cetak', [DaftarController::class, 'cetakdetail'])->middleware(['auth'])->name('daftar.cetak');
+Route::get('/cetak', [DaftarController::class, 'cetakdetail'])->middleware(['auth'])->name('daftar.cetak');
 Route::get('/daftar/plant/{plant_id}', [DaftarController::class, 'showplant'])->middleware(['auth'])->name('daftar.show.plant');
 Route::get('/daftar/{perusahaan_id}/edit', [DaftarController::class, 'edit'])->middleware(['auth'])->name('daftar.edit');
 Route::get('/daftar/cari', [Cariperusahaan::class, 'docariperusahaan'])->middleware(['auth'])->name('daftar.cari');

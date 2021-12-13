@@ -11,6 +11,8 @@ use App\Models\Tipesarana;
 use App\Models\Perusahaanproduk;
 use App\Models\Plant;
 
+use PDF;
+
 class DaftarController extends Controller
 {
     /**
@@ -73,7 +75,7 @@ class DaftarController extends Controller
         return view('pages.detail', ['perusahaan' => $perusahaan, 'plants' => $plants]);
     }
 
-    public function cetakdetail($perusahaan_id)
+    public function cetakdetail()
     {
          $plants = Plant::select('tipesaranas.tipe', 'registers.nomor_registrasi', 'plants.id', 'plants.nama_plant','perusahaans.badan_hukum as perusahaan_badan_hukum', 'perusahaans.nama as perusahaan', 'plants.alamat_jalan', 'plants.alamat_rt', 'plants.alamat_rw', 'kelurahans.nama as kelurahan', 'kecamatans.nama as kecamatan', 'kabupatens.nama as kabupaten', 'propinsis.nama as propinsi')
                         ->leftJoin('tipesaranas', 'plants.tipesarana_id', 'tipesaranas.id')
@@ -96,13 +98,25 @@ class DaftarController extends Controller
                                         ->where('perusahaanproduks.plant_id', $plant['id'])
                                         ->get()
                                         ->toArray();
+            if(!isset($produks['produk_nama']))
+            {
+                 $rekapitulasi[$key]['produks'][0]['produk_nama'] = "no data";
+                 $rekapitulasi[$key]['produks'][0]['id'] = "no data";
+                 $rekapitulasi[$key]['produks'][0]['plant_id'] = "no data";
+                 $rekapitulasi[$key]['produks'][0]['produk_id'] = "no data";
+                 $rekapitulasi[$key]['produks'][0]['hs_code'] = "no data";
+                 $rekapitulasi[$key]['produks'][0]['epoch_product_last_export'] = "no data";
+            }
             foreach($produks as $key_produk => $produk)
             {
                 $rekapitulasi[$key]['produks'][$key_produk] = $produk;
             }
         }
 
-        return view('pages.cetakdetail', ['details' => $rekapitulasi]);
+        $pdf = PDF::loadview('pages.cetakdetail', ['details' => $rekapitulasi])->setPaper('legal', 'landscape');
+        return $pdf->stream();
+
+        // return view('pages.cetakdetail', ['details' => $rekapitulasi]);
     }
 
     public function showplant($plant_id)

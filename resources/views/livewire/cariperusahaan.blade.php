@@ -7,7 +7,10 @@
         Searching...
     </div>
     <div class="mt-4 mb-2 flex justify-end">
-        <a href="{{ route('form.daftar') }}" class="px-2 py-2 bg-green-400 rounded hover:bg-green-200 text-xs font-bold uppercase">Registrasi Baru</a>
+        <div class="flex flex-row gap-3">
+            <a href="{{ route('form.daftar') }}" class="px-2 py-2 bg-green-400 rounded hover:bg-green-200 text-xs font-bold uppercase">Registrasi Baru</a>
+            <a href="{{ route('daftar.cetak') }}" class="px-2 py-2 bg-yellow-400 rounded hover:bg-yellow-200 text-xs font-bold uppercase">Cetak PDF</a>
+        </div>
     </div>
     <table class="border border-collapse w-full table-auto">
         <thead>
