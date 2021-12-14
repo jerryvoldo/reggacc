@@ -78,6 +78,12 @@ return array (
     'italic' => $rootDir . '/lib/fonts/DejaVuSerif-Italic',
     'normal' => $rootDir . '/lib/fonts/DejaVuSerif',
   ),
+  'fireflysung' => array(
+    'normal' => $fontDir . '/fireflysung',
+    'bold' => $fontDir . '/fireflysung',
+    'italic' => $fontDir . '/fireflysung',
+    'bold_italic' => $fontDir . '/fireflysung',
+  ),
   'nunito' => array(
     '200_italic' => $fontDir . '/nunito_200_italic_34370ef8067116a2903eda71bc4d8b7f',
     '300_italic' => $fontDir . '/nunito_300_italic_a973991d131929d777d9c6fc52a736d0',
@@ -95,6 +101,10 @@ return array (
     'bold' => $fontDir . '/nunito_bold_20491dd02d708ed860212ace0e462b13',
     '800' => $fontDir . '/nunito_800_aeaea48297f30cd30a57971e8896bf3e',
     '900' => $fontDir . '/nunito_900_af97a09b5f9cb093e4af0304c01d522f',
+  ),
+  'firefly sung' => array(
+    'normal' => $fontDir . '/firefly_sung_normal_fbe0d3322808aed4540a9fbbf02fdc78',
+    '500' => $fontDir . '/firefly_sung_500_fbe0d3322808aed4540a9fbbf02fdc78',
   ),
 );
 }; ?>
