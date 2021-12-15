@@ -75,49 +75,6 @@ class DaftarController extends Controller
         return view('pages.detail', ['perusahaan' => $perusahaan, 'plants' => $plants]);
     }
 
-    public function cetakdetail()
-    {
-         $plants = Plant::select('tipesaranas.tipe', 'registers.nomor_registrasi', 'plants.id', 'plants.nama_plant','perusahaans.badan_hukum as perusahaan_badan_hukum', 'perusahaans.nama as perusahaan', 'plants.alamat_jalan', 'plants.alamat_rt', 'plants.alamat_rw', 'kelurahans.nama as kelurahan', 'kecamatans.nama as kecamatan', 'kabupatens.nama as kabupaten', 'propinsis.nama as propinsi')
-                        ->leftJoin('tipesaranas', 'plants.tipesarana_id', 'tipesaranas.id')
-                        ->leftJoin('registers', 'plants.id', 'registers.plant_id')
-                        ->leftJoin('perusahaans', 'plants.perusahaan_id', 'perusahaans.id')
-                        ->leftJoin('kelurahans', 'plants.alamat_kelurahan', 'kelurahans.id')
-                        ->leftJoin('kecamatans', 'plants.alamat_kecamatan', 'kecamatans.id')
-                        ->leftJoin('kabupatens', 'plants.alamat_kabupaten', 'kabupatens.id')
-                        ->leftJoin('propinsis', 'plants.alamat_propinsi', 'propinsis.id')
-                        ->orderBy('perusahaans.id', 'asc')
-                        ->get()->toArray();
-        
-        $rekapitulasi = [];
-
-        foreach($plants as $key => $plant)
-        {
-            $rekapitulasi[$key]= $plant;
-            $produks = Perusahaanproduk::leftJoin('produks', 'perusahaanproduks.produk_id', 'produks.id')
-                                        ->select('produks.nama as produk_nama',  'perusahaanproduks.*')
-                                        ->where('perusahaanproduks.plant_id', $plant['id'])
-                                        ->get()
-                                        ->toArray();
-            if(!isset($produks['produk_nama']))
-            {
-                 $rekapitulasi[$key]['produks'][0]['produk_nama'] = "no data";
-                 $rekapitulasi[$key]['produks'][0]['id'] = "no data";
-                 $rekapitulasi[$key]['produks'][0]['plant_id'] = "no data";
-                 $rekapitulasi[$key]['produks'][0]['produk_id'] = "no data";
-                 $rekapitulasi[$key]['produks'][0]['hs_code'] = "no data";
-                 $rekapitulasi[$key]['produks'][0]['epoch_product_last_export'] = "no data";
-            }
-            foreach($produks as $key_produk => $produk)
-            {
-                $rekapitulasi[$key]['produks'][$key_produk] = $produk;
-            }
-        }
-
-        $pdf = PDF2::loadview('pages.cetakdetail', ['details' => $rekapitulasi]);
-        return $pdf->stream();
-
-        // return view('pages.cetakdetail', ['details' => $rekapitulasi]);
-    }
 
 
 
@@ -194,8 +151,7 @@ class DaftarController extends Controller
         $perusahaan = Perusahaan::find($request->perusahaan_id);
         if($perusahaan->delete())
         {
-            $produk = Perusahaanproduk::find($request->perusahaan_id);
-            $produk->delete();
+           DB::statement('with deleted_plant as (delete from plants where perusahaan_id = '.$request->perusahaan_id. ' returning id), deleted_produks as (delete from perusahaanproduks where plant_id IN (select id from deleted_plant)) delete from registers where plant_id IN (select id from deleted_plant)');
         }
         return redirect()->route('daftar.daftar');
     }

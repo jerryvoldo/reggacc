@@ -13,26 +13,29 @@
                     s.d
                     <x-input wire:model="epoch_created_end" id="epoch_created_end" class="bg-gray-100 block mt-1 w-full" type="date" name="epoch_created_end" :value="old('epoch_created_end')" required autofocus />
                 </div>
-                <div class="mt-2">
-                    <x-label for="propinsi" :value="__('Propinsi')" />
-                    <select wire:model="propinsi_id"  class="w-full bg-gray-100 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="propinsi_id">
-                        <option value="">--Pilih propinsi--</option>
-                        @foreach($propinsi as $pro)
-                        <option value="{{ $pro->id }}">{{ $pro->nama }}</option>
-                        @endforeach
-                    </select>
+                <div class="mt-2 flex flex-row gap-2">
+                    <div class="flex-1">
+                        <x-label for="propinsi" :value="__('Propinsi')" />
+                        <select wire:model="propinsi_id"  class="w-full bg-gray-100 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="propinsi_id">
+                            <option value="">--Pilih propinsi--</option>
+                            @foreach($propinsi as $pro)
+                            <option value="{{ $pro->id }}">{{ $pro->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="flex-1">
+                        <x-label for="jenisproduk" :value="__('Jenis Produk')" />
+                        <select wire:model="produk_id" class="w-full bg-gray-100 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="produk_id">
+                            <option value="">--Pilih jenis produk--</option>
+                            @foreach($jenis_produk as $produk)
+                            <option value="{{ $produk->id }}">{{ $produk->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-                <div class="mt-2">
-                    <x-label for="jenisproduk" :value="__('Jenis Produk')" />
-                    <select wire:model="produk_id" class="w-full bg-gray-100 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="produk_id">
-                        <option>--Pilih jenis produk--</option>
-                        @foreach($jenis_produk as $produk)
-                        <option value="{{ $produk->id }}">{{ $produk->nama }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                
                 <div class="flex items-center justify-end mt-4">
-                    <x-button wire:click.prevent="docariperusahaan" class="ml-3">
+                    <x-button wire:click.prevent="filterdata" class="ml-3">
                         {{ __('Filter') }}
                     </x-button>
                 </div>
@@ -41,7 +44,7 @@
     </div>
     <div class="mt-4 mb-2 flex justify-end">
         <div class="flex flex-row gap-3">
-            <a href="{{ route('form.daftar') }}" class="px-2 py-2 bg-blue-400 rounded hover:bg-blue-200 text-xs font-bold uppercase">Registrasi Baru</a>
+            <a href="{{ route('form.daftar') }}" class="px-2 py-2 bg-blue-400 rounded hover:bg-blue-200 text-xs font-bold uppercase">+ Registrasi Baru</a>
             <a href="javascript:void(0);" wire:click="eksporpdf" class="px-2 py-2 bg-red-400 rounded hover:bg-red-200 text-xs font-bold uppercase">PDF</a>
             <a href="javascript:void(0);" wire:click="eksporexcel" class="px-2 py-2 bg-green-400 rounded hover:bg-green-200 text-xs font-bold uppercase">Excel</a>
         </div>
