@@ -5,55 +5,18 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Cetak Detail</title>
 
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100&display=swap" rel="stylesheet">
 
-	<style type="text/css">
-		
 
-	    body {
-	        font-family: 'Nunito', 'fireflysung',  sans-serif;
-	    }
-		.styled-table {
-			    border-collapse: collapse;
-			    margin: 25px 0;
-			    font-size: small;
-			    min-width: 400px;
-			    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-			}
-
-		.styled-table thead tr {
-			    background-color:#778899;
-			    color: #ffffff;
-			    text-align: left;
-			}
-
-		.styled-table th,
-		.styled-table td {
-		    padding: 5px;
-		}
-
-		.styled-table tbody tr {
-			    border-bottom: 1px solid #dddddd;
-			}
-		.capitalize {
-			text-transform: capitalize;
-		}
-
-    
-		</style>
 </head>
 <body>
 	<center>
-		<h4 class="capitalize">Indonesian  FDA_List of Recommended registration of overseas manufacturers of Imported Food_existing trade imported food listed in annex 1</h4>
+		<h4>Indonesian  FDA_List of Recommended registration of overseas manufacturers of Imported Food_existing trade imported food listed in annex 1</h4>
 	</center>
 	<div>
-	<table class="styled-table" border="1" >
+	<table border="1" >
 		<thead>
 			<tr>
-				<th>序号</span><br> No.</th>
+				<th>序号<br> No.</th>
 				<th>注册编号 <br>Registration No.</th>
 				<th>企业名称<br>Name of Manufacturers</th>
 				<th>注册地址<br>Address of Manufacturers</th>
@@ -91,8 +54,8 @@
 						<td>{{ ($produk['epoch_product_last_export'] === 'no data' ? 'no data' : date('d F Y', $produk['epoch_product_last_export'])) }}</td>
 				</tr>
 				@endforeach
-				<?php $i++?>
 			@endforeach
+			<?php $i++?>
 			@endforeach
 		</tbody>
 	</table>

@@ -11,7 +11,7 @@ use App\Models\Tipesarana;
 use App\Models\Perusahaanproduk;
 use App\Models\Plant;
 
-use PDF;
+use PDF2;
 
 class DaftarController extends Controller
 {
@@ -113,11 +113,13 @@ class DaftarController extends Controller
             }
         }
 
-        $pdf = PDF::loadview('pages.cetakdetail', ['details' => $rekapitulasi])->setPaper('legal', 'landscape');
+        $pdf = PDF2::loadview('pages.cetakdetail', ['details' => $rekapitulasi]);
         return $pdf->stream();
 
         // return view('pages.cetakdetail', ['details' => $rekapitulasi]);
     }
+
+
 
     public function showplant($plant_id)
     {
